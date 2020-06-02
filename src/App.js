@@ -8,7 +8,8 @@ export default class App extends Component {
     super(props)
     this.state={
         squares:Array(9).fill(""),
-        isXNext:true // if it's true then X false then O
+        isXNext:true, // if it's true then X false then O
+        history: [], //{square:square at the moment, isXNext:the value of the moment} [{}, {}, {}]
     }
 }
 
@@ -17,12 +18,33 @@ export default class App extends Component {
     this.setState(obj)
   }
 
+  handleHistory = (num) =>{
+    this.setState({squares: this.state.history[num]})
+  }
+
+ timeTravel=(index)=>{
+   console.log("back to back", index)
+   //set your squares and isNext value to the previous history (exactly the history you clicked)
+   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext}) 
+ }
+
+
   render() {
+    console.log("What is changed history here", this.state.history)
+
+
     return (
       <div>
         <center><h1>TIC-TAC-TOE</h1></center>
-        <center><Board {...this.state} setTheState={this.setTheState}/></center>
-      </div>
+        <div style={{display:"flex"}}><center><Board {...this.state} setTheState={this.setTheState}/></center>
+        <div>HISTORY
+          {console.log("history is", this.state.history)}
+          {this.state.history.map((item, index)=>{
+            return <div><button onClick={()=>this.timeTravel(index)}>move {index+1}</button></div>
+          })}
+        </div>
+        </div>
+      </div>//end wrapper
     )
   }
 }

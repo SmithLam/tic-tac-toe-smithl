@@ -13,8 +13,15 @@ export default class Board extends Component {
         //change the value from null to "X" at the array index number id
         let squaresChanged = this.props.squares
         squaresChanged[id] = this.props.isXNext? X:O
+        // let historyChanged = this.props.history.slice()
+        // historyChanged.push({squaresChanged.slice(), isXNext:!this.props.isXNext})
         console.log("What is square in box", squaresChanged)
-        this.props.setTheState({squares:squaresChanged, isXNext:!this.props.isXNext})
+        // console.log("What is changed history", historyChanged)
+        this.props.setTheState({
+            squares:squaresChanged, 
+            isXNext:!this.props.isXNext,
+            history: [...this.props.history.slice(),{squares:squaresChanged.slice(), isXNext:!this.props.isXNext}]
+        })
     }
 
    calculateWinner(squares) {
