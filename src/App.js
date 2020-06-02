@@ -7,7 +7,7 @@ export default class App extends Component {
   constructor(props){
     super(props)
     this.state={
-        squares:Array(9).fill("Smith"),
+        squares:Array(9).fill(""),
         isXNext:true // if it's true then X false then O
     }
 }
@@ -20,8 +20,8 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <h1>This is tic-tac-toe</h1>
-        <Board {...this.state} setTheState={this.setTheState}/>
+        <center><h1>TIC-TAC-TOE</h1></center>
+        <center><Board {...this.state} setTheState={this.setTheState}/></center>
       </div>
     )
   }
