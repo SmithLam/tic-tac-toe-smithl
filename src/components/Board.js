@@ -4,14 +4,26 @@ import O from './O.png'
 import X from './X.png'
 
 export default class Board extends Component {
+  constructor(props){
+    super(props);
+    this.state={gameOver:false}
+}
 
     renderSquare = (num) =>{
-        return <Square id={num} boxClick={this.boxClick} squares={this.props.squares[num]}/>
+        return <Square id={num} gameOver={this.state.gameOver} boxClick={this.boxClick} squares={this.props.squares[num]}/>
     };
 
     boxClick = (id) =>{
         //change the value from null to "X" at the array index number id
         let squaresChanged = this.props.squares
+        
+        // console.log("What is winner", winnerSquare)
+        // if (this.calculateWinner(squaresChanged) || squaresChanged[id]) {
+        //   console.log("What is SQUARE", this.calculateWinner(squaresChanged))
+        //   console.log("What is WINNER", squaresChanged[id])
+        //   this.setState({gameOver:true})
+        //   // return;
+        // }
         squaresChanged[id] = this.props.isXNext? X:O
         console.log("What is square in box", squaresChanged)
         this.props.setTheState({
@@ -19,6 +31,12 @@ export default class Board extends Component {
             isXNext:!this.props.isXNext,
             history: [...this.props.history.slice(),{squares:squaresChanged.slice(), isXNext:!this.props.isXNext}]
         })
+        let winnerSquare = this.calculateWinner(squaresChanged)
+        if (winnerSquare != null){
+         console.log("What is the winner square", winnerSquare)
+          this.setState({gameOver:true})
+          console.log("Winnersquare what is winner", this.state.gameOver)
+        }
     }
 
    calculateWinner(squares) {
@@ -41,9 +59,10 @@ export default class Board extends Component {
         return null;
       }
 
-    postData = async () =>{
+    postData = async (name) =>{
+      console.log("What is name", name)
       let data = new URLSearchParams();
-      data.append("player", "Smith");
+      data.append("player", name);
       data.append("score", 3);//start time ~ finish time
       const url = `http://ftw-highscores.herokuapp.com/tictactoe-dev`;
       const response = await fetch(url, {
@@ -66,12 +85,12 @@ export default class Board extends Component {
         let status=''
         if (winner) {
          status = <div id="player-text"><span id="winner-text">Winner is</span> <img id="winner-image" alt="#" src={winner}/></div>
-        //  this.postData()
           } else {
             status = <div id="player-text">Player is<img id="winner-image" alt="#" src={this.props.isXNext? X:O}/></div>
           }
         return (
             <div>
+                  {console.log("What is FacebookData name in Board", this.props.FacebookData.name)}
                 {status}
                 <div className="row">
                 {this.renderSquare(0)}
@@ -88,7 +107,8 @@ export default class Board extends Component {
                 {this.renderSquare(7)}
                 {this.renderSquare(8)}
                 </div>
-                <button onClick ={() => {this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[]})}} >Reset</button>
+                <button onClick ={() => {this.setState({gameOver:false});
+                  this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[]})}} >Reset</button>
             </div>
         )
     }

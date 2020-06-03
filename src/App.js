@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Board from './components/Board'
 import './App.css'
+import FacebookLogin from 'react-facebook-login';
+
+const APP_ID = process.env.REACT_APP_APP_ID;
 
 export default class App extends Component {
 
@@ -10,9 +13,19 @@ export default class App extends Component {
         squares:Array(9).fill(""),
         isXNext:true, // if it's true then X false then O
         history: [], //{square:square at the moment, isXNext:the value of the moment} [{}, {}, {}]
-        topRank:[]
+        topRank:[],
+        logInFacebook:false,
+        FacebookData:"",
       }
 }
+
+  responseFacebook = (response) => {
+  console.log(response);
+  this.setState({logInFacebook:true})
+  console.log(response.name)
+  this.setState({FacebookData:response})
+  console.log("What is facebook data", this.state.FacebookData)
+  }
 
 
   setTheState = (obj) =>{
@@ -40,17 +53,31 @@ export default class App extends Component {
   console.log("what is result", result)
 }
 
+
 componentDidMount(){
   this.getData()
 }
-
 
   render() {
     console.log("What is changed history here", this.state.history)
     return (
       <div>
+
+        {
+          this.state.logInFacebook? <div>You are already logged in!</div>:       
+          <FacebookLogin
+          autoLoad={false}
+          appId={APP_ID}
+          fields="name,email,picture"
+          callback={this.responseFacebook}
+          />
+        }
+     
+        {console.log("What is App ID", APP_ID)}
         <center><h1>TIC-TAC-TOE</h1></center>
-        <div style={{display:"flex"}}><center><Board {...this.state} setTheState={this.setTheState}/></center>
+        <div style={{display:"flex"}}><center>
+        <Board {...this.state} FacebookData={this.state.FacebookData} setTheState={this.setTheState}/>
+        </center>
         <div id="history">HISTORY
           {console.log("history is", this.state.history)}
           {this.state.history.map((item, index)=>{
@@ -60,7 +87,7 @@ componentDidMount(){
         <div>
           <h1>Data is here</h1>
           <p>{this.state.topRank.map(item =>{
-            return <div>{item.player}:{item.score}</div>
+            return <div>{item.player}: {item.score}</div>
           })}</p>
         </div>
         </div>
