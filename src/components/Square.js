@@ -15,19 +15,16 @@ componentWillReceiveProps(props){
     render() {
         console.log("What is gameover", this.state.gameOver)
         return (
-
-            <div>{this.state.gameOver?  
-            <div className="box"onClick ={() => console.log("You have lost")}>
-      
-          <img alt="" src={this.props.squares}/>
-        </div>:            
-        <div className="box" onClick ={() => this.props.boxClick(this.props.id)}>
-
-      <img alt="" src={this.props.squares}/>
-    </div>
-            
-            
-            }</div>
+            <div>{this.state.gameOver? //if else statement to determine gameOver
+                <div className="box" onClick ={() => console.log("Game is Over")}>
+                <img alt="" src={this.props.squares}/>
+                </div>
+                ://the if else statement separator            
+                <div className="box" onClick ={() => this.props.boxClick(this.props.id)}>
+                <img alt="" src={this.props.squares}/>
+                </div>
+                }
+            </div>
         )
     }
 }

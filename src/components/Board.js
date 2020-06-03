@@ -33,9 +33,7 @@ export default class Board extends Component {
         })
         let winnerSquare = this.calculateWinner(squaresChanged)
         if (winnerSquare != null){
-         console.log("What is the winner square", winnerSquare)
           this.setState({gameOver:true})
-          console.log("Winnersquare what is winner", this.state.gameOver)
         }
     }
 

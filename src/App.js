@@ -62,35 +62,39 @@ componentDidMount(){
     console.log("What is changed history here", this.state.history)
     return (
       <div>
-
-        {
-          this.state.logInFacebook? <div>You are already logged in!</div>:       
+        {this.state.logInFacebook? //use if else to different the log in screen
+        <div><div>You are already logged in!</div>
+        <center><h1>TIC-TAC-TOE</h1></center>
+        <div style={{display:"flex"}}>
+        <center>
+        <Board {...this.state} FacebookData={this.state.FacebookData} setTheState={this.setTheState}/>
+        </center>
+        <div id="history">
+          <h3>HISTORY</h3>
+          <p>{this.state.history.map((item, index)=>{
+            return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
+          })}</p>
+        </div>
+        <div id="data">
+          <h3>PLAYER SCORES</h3>
+          <p>{this.state.topRank.map(item =>{
+            return <div>{item.player}: {item.score}</div>
+          })}</p>
+        </div>
+        </div>
+        </div>
+        ://the if else statement  
+        <div id="facebook-screen">    
           <FacebookLogin
           autoLoad={false}
           appId={APP_ID}
           fields="name,email,picture"
           callback={this.responseFacebook}
           />
+        </div> 
         }
      
-        {console.log("What is App ID", APP_ID)}
-        <center><h1>TIC-TAC-TOE</h1></center>
-        <div style={{display:"flex"}}><center>
-        <Board {...this.state} FacebookData={this.state.FacebookData} setTheState={this.setTheState}/>
-        </center>
-        <div id="history">HISTORY
-          {console.log("history is", this.state.history)}
-          {this.state.history.map((item, index)=>{
-            return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
-          })}
-        </div>
-        <div>
-          <h1>Data is here</h1>
-          <p>{this.state.topRank.map(item =>{
-            return <div>{item.player}: {item.score}</div>
-          })}</p>
-        </div>
-        </div>
+        
       </div>//end wrapper
     )
   }
