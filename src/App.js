@@ -10,7 +10,8 @@ export default class App extends Component {
         squares:Array(9).fill(""),
         isXNext:true, // if it's true then X false then O
         history: [], //{square:square at the moment, isXNext:the value of the moment} [{}, {}, {}]
-    }
+        topRank:[]
+      }
 }
 
 
@@ -24,13 +25,24 @@ export default class App extends Component {
 
  timeTravel=(index)=>{
    console.log("back to back", index)
-   console.log("back to back to delete", (index+1))
    //set your squares and isNext value to the previous history (exactly the history you clicked)
-   let historyNew = this.state.history.splice((index+1))
+   let historyNew = this.state.history.splice(index+1)
    console.log("what is history here", this.state.history)
    console.log("what is new history", historyNew)
    this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, history:[...this.state.history]})
  }
+
+ getData = async() =>{
+  let url=`http://ftw-highscores.herokuapp.com/tictactoe-dev`
+  let data = await fetch(url)
+  let result = await data.json()
+  this.setState({...this.state, topRank: result.items})
+  console.log("what is result", result)
+}
+
+componentDidMount(){
+  this.getData()
+}
 
 
   render() {
@@ -44,6 +56,12 @@ export default class App extends Component {
           {this.state.history.map((item, index)=>{
             return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
           })}
+        </div>
+        <div>
+          <h1>Data is here</h1>
+          <p>{this.state.topRank.map(item =>{
+            return <div>{item.player}:{item.score}</div>
+          })}</p>
         </div>
         </div>
       </div>//end wrapper

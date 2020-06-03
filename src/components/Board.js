@@ -41,6 +41,24 @@ export default class Board extends Component {
         return null;
       }
 
+    postData = async () =>{
+      let data = new URLSearchParams();
+      data.append("player", "Smith");
+      data.append("score", 3);//start time ~ finish time
+      const url = `http://ftw-highscores.herokuapp.com/tictactoe-dev`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: data.toString(),//change object to String
+        json: true
+      });
+      console.log("what is response", response)
+    }
+      // We actually don't care about the response ... do we?
+      
+
 
     render() {
         const winner = this.calculateWinner(this.props.squares)
@@ -48,6 +66,7 @@ export default class Board extends Component {
         let status=''
         if (winner) {
          status = <div id="player-text"><span id="winner-text">Winner is</span> <img id="winner-image" alt="#" src={winner}/></div>
+        //  this.postData()
           } else {
             status = <div id="player-text">Player is<img id="winner-image" alt="#" src={this.props.isXNext? X:O}/></div>
           }
