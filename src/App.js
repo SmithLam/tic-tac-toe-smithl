@@ -24,23 +24,25 @@ export default class App extends Component {
 
  timeTravel=(index)=>{
    console.log("back to back", index)
+   console.log("back to back to delete", (index+1))
    //set your squares and isNext value to the previous history (exactly the history you clicked)
-   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext}) 
+   let historyNew = this.state.history.splice((index+1))
+   console.log("what is history here", this.state.history)
+   console.log("what is new history", historyNew)
+   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, history:[...this.state.history]})
  }
 
 
   render() {
     console.log("What is changed history here", this.state.history)
-
-
     return (
       <div>
         <center><h1>TIC-TAC-TOE</h1></center>
         <div style={{display:"flex"}}><center><Board {...this.state} setTheState={this.setTheState}/></center>
-        <div>HISTORY
+        <div id="history">HISTORY
           {console.log("history is", this.state.history)}
           {this.state.history.map((item, index)=>{
-            return <div><button onClick={()=>this.timeTravel(index)}>move {index+1}</button></div>
+            return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
           })}
         </div>
         </div>

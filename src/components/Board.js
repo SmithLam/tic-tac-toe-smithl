@@ -13,10 +13,7 @@ export default class Board extends Component {
         //change the value from null to "X" at the array index number id
         let squaresChanged = this.props.squares
         squaresChanged[id] = this.props.isXNext? X:O
-        // let historyChanged = this.props.history.slice()
-        // historyChanged.push({squaresChanged.slice(), isXNext:!this.props.isXNext})
         console.log("What is square in box", squaresChanged)
-        // console.log("What is changed history", historyChanged)
         this.props.setTheState({
             squares:squaresChanged, 
             isXNext:!this.props.isXNext,
@@ -54,7 +51,6 @@ export default class Board extends Component {
           } else {
             status = <div id="player-text">Player is<img id="winner-image" alt="#" src={this.props.isXNext? X:O}/></div>
           }
-        console.log("status", status)
         return (
             <div>
                 {status}
@@ -73,7 +69,7 @@ export default class Board extends Component {
                 {this.renderSquare(7)}
                 {this.renderSquare(8)}
                 </div>
-                <button onClick ={() => {this.props.setTheState({squares:Array(9).fill(null), isXNext:true})}} >Reset</button>
+                <button onClick ={() => {this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[]})}} >Reset</button>
             </div>
         )
     }
