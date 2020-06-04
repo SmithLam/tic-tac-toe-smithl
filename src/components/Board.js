@@ -4,20 +4,15 @@ import O from './O.png'
 import X from './X.png'
 
 export default class Board extends Component {
-  constructor(props){
-    super(props);
-    this.state={gameOver:false}
-}
+
 
     renderSquare = (num) =>{
-        return <Square id={num} gameOver={this.state.gameOver} boxClick={this.boxClick} squares={this.props.squares[num]}/>
+        return <Square id={num} gameOver={this.props.gameOver} boxClick={this.boxClick} squares={this.props.squares[num]}/>
     };
 
     boxClick = (id) =>{
         //change the value from null to "X" at the array index number id
         let squaresChanged = this.props.squares
-        
-        // console.log("What is winner", winnerSquare)
         // if (this.calculateWinner(squaresChanged) || squaresChanged[id]) {
         //   console.log("What is SQUARE", this.calculateWinner(squaresChanged))
         //   console.log("What is WINNER", squaresChanged[id])
@@ -33,7 +28,7 @@ export default class Board extends Component {
         })
         let winnerSquare = this.calculateWinner(squaresChanged)
         if (winnerSquare != null){
-          this.setState({gameOver:true})
+          this.props.setTheState({gameOver:!this.props.gameOver, history:[...this.props.history.slice()]})
         }
     }
 
@@ -106,7 +101,7 @@ export default class Board extends Component {
                 {this.renderSquare(8)}
                 </div>
                 <button onClick ={() => {this.setState({gameOver:false});
-                  this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[]})}} >Reset</button>
+                  this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[], gameOver:false})}} >Reset</button>
             </div>
         )
     }

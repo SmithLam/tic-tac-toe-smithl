@@ -16,6 +16,7 @@ export default class App extends Component {
         topRank:[],
         logInFacebook:false,
         FacebookData:"",
+        gameOver:false,
       }
 }
 
@@ -38,11 +39,10 @@ export default class App extends Component {
 
  timeTravel=(index)=>{
    console.log("back to back", index)
-   //set your squares and isNext value to the previous history (exactly the history you clicked)
    let historyNew = this.state.history.splice(index+1)
    console.log("what is history here", this.state.history)
    console.log("what is new history", historyNew)
-   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, history:[...this.state.history]})
+   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, history:[...this.state.history], gameOver:!this.state.gameOver})
  }
 
  getData = async() =>{
@@ -72,6 +72,7 @@ componentDidMount(){
         <div id="history">
           <h3>HISTORY</h3>
           <p>{this.state.history.map((item, index)=>{
+            console.log("what is index", index)
             return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
           })}</p>
         </div>
