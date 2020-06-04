@@ -57,7 +57,7 @@ componentDidMount(){
 }
 
   render() {
-  this.getData()
+
     return (
       <div>
         {this.state.logInFacebook? //use if else to different the log in screen
