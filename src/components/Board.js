@@ -5,6 +5,7 @@ import X from './X.png'
 
 
 let startTime = 0
+let score = 0
 export default class Board extends Component {
 
 
@@ -35,8 +36,9 @@ export default class Board extends Component {
         })
         let winnerSquare = this.calculateWinner(squaresChanged)
         if (winnerSquare != null){
-          this.props.setTheState({gameOver:!this.props.gameOver, history:[...this.props.history.slice()], 
-            score: (Math.floor((Date.now() - startTime)/1000))})
+          score = (10-Math.floor((Date.now() - startTime)/1000))
+          this.props.setTheState({gameOver:!this.props.gameOver, history:[...this.props.history.slice()], score: score})
+          this.postData(score)
         }
     }
 
@@ -60,11 +62,11 @@ export default class Board extends Component {
         return null;
       }
 
-    postData = async (name) =>{
-      console.log("What is name", name)
+    postData = async (score) =>{
+      console.log("What is score here", score)
       let data = new URLSearchParams();
-      data.append("player", name);
-      data.append("score", 3);//start time ~ finish time
+      data.append("player", "Smith Lam");
+      data.append("score", score);//start time ~ finish time
       const url = `http://ftw-highscores.herokuapp.com/tictactoe-dev`;
       const response = await fetch(url, {
         method: "POST",
