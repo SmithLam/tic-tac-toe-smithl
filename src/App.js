@@ -10,13 +10,14 @@ export default class App extends Component {
   constructor(props){
     super(props)
     this.state={
-        squares:Array(9).fill(""),
+        squares:Array(9).fill(null),
         isXNext:true, // if it's true then X false then O
         history: [], //{square:square at the moment, isXNext:the value of the moment} [{}, {}, {}]
         topRank:[],
-        logInFacebook:false,
+        logInFacebook:true,
         FacebookData:"",
         gameOver:false,
+        score:0,
       }
 }
 
@@ -38,11 +39,9 @@ export default class App extends Component {
   }
 
  timeTravel=(index)=>{
-   console.log("back to back", index)
    let historyNew = this.state.history.splice(index+1)
-   console.log("what is history here", this.state.history)
-   console.log("what is new history", historyNew)
-   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, history:[...this.state.history], gameOver:!this.state.gameOver})
+   console.log("what is move here", this.state.history[index].move)
+   this.setState({squares: this.state.history[index].squares.slice(), isXNext:this.state.history[index].isXNext, move:this.state.history[index].move, history:[...this.state.history], gameOver:!this.state.gameOver, score:0})
  }
 
  getData = async() =>{
@@ -50,7 +49,6 @@ export default class App extends Component {
   let data = await fetch(url)
   let result = await data.json()
   this.setState({...this.state, topRank: result.items})
-  console.log("what is result", result)
 }
 
 
@@ -59,11 +57,13 @@ componentDidMount(){
 }
 
   render() {
-    console.log("What is changed history here", this.state.history)
+  this.getData()
     return (
       <div>
         {this.state.logInFacebook? //use if else to different the log in screen
-        <div><div>You are already logged in!</div>
+        <div>
+          <div>You are already logged in!</div>
+        <div>Score: {this.state.score}</div>
         <center><h1>TIC-TAC-TOE</h1></center>
         <div style={{display:"flex"}}>
         <center>
@@ -72,12 +72,11 @@ componentDidMount(){
         <div id="history">
           <h3>HISTORY</h3>
           <p>{this.state.history.map((item, index)=>{
-            console.log("what is index", index)
             return <div><button onClick={()=>this.timeTravel(index)}>Move {index+1}</button></div>
           })}</p>
         </div>
         <div id="data">
-          <h3>PLAYER SCORES</h3>
+          <h3>PLAYERS SCORES</h3>
           <p>{this.state.topRank.map(item =>{
             return <div>{item.player}: {item.score}</div>
           })}</p>

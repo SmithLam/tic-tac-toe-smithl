@@ -3,6 +3,8 @@ import Square from './Square'
 import O from './O.png'
 import X from './X.png'
 
+
+let startTime = 0
 export default class Board extends Component {
 
 
@@ -14,21 +16,27 @@ export default class Board extends Component {
         //change the value from null to "X" at the array index number id
         let squaresChanged = this.props.squares
         // if (this.calculateWinner(squaresChanged) || squaresChanged[id]) {
-        //   console.log("What is SQUARE", this.calculateWinner(squaresChanged))
-        //   console.log("What is WINNER", squaresChanged[id])
         //   this.setState({gameOver:true})
-        //   // return;
+        //   return;
         // }
+        if(squaresChanged.every(item=>item === null)){
+          startTime = Date.now()
+          console.log("what is start time", startTime)
+        }
+        if (squaresChanged[id] != null){
+          return
+        }
         squaresChanged[id] = this.props.isXNext? X:O
-        console.log("What is square in box", squaresChanged)
         this.props.setTheState({
             squares:squaresChanged, 
+            score:0,
             isXNext:!this.props.isXNext,
             history: [...this.props.history.slice(),{squares:squaresChanged.slice(), isXNext:!this.props.isXNext}]
         })
         let winnerSquare = this.calculateWinner(squaresChanged)
         if (winnerSquare != null){
-          this.props.setTheState({gameOver:!this.props.gameOver, history:[...this.props.history.slice()]})
+          this.props.setTheState({gameOver:!this.props.gameOver, history:[...this.props.history.slice()], 
+            score: (Math.floor((Date.now() - startTime)/1000))})
         }
     }
 
@@ -74,7 +82,6 @@ export default class Board extends Component {
 
     render() {
         const winner = this.calculateWinner(this.props.squares)
-        console.log("who is winner", winner)
         let status=''
         if (winner) {
          status = <div id="player-text"><span id="winner-text">Winner is</span> <img id="winner-image" alt="#" src={winner}/></div>
@@ -83,7 +90,6 @@ export default class Board extends Component {
           }
         return (
             <div>
-                  {console.log("What is FacebookData name in Board", this.props.FacebookData.name)}
                 {status}
                 <div className="row">
                 {this.renderSquare(0)}
@@ -101,7 +107,7 @@ export default class Board extends Component {
                 {this.renderSquare(8)}
                 </div>
                 <button onClick ={() => {this.setState({gameOver:false});
-                  this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[], gameOver:false})}} >Reset</button>
+                  this.props.setTheState({squares:Array(9).fill(null), isXNext:true, history:[], score:0, gameOver:false})}} >Reset</button>
             </div>
         )
     }
